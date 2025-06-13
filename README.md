@@ -18,13 +18,31 @@ Akihabara Market es una aplicación desarrollada en Java que permite gestionar e
 
 1. Inicia tu servidor MySQL y accede a la consola de administración.
 2. Crea la base de datos con el nombre `akihabara_db`.
-3. Ejecuta el script SQL incluido en el archivo `crear_tabla.sql` para crear la tabla `productos` con los siguientes campos:
-   - `id` INT AUTO_INCREMENT PRIMARY KEY
-   - `nombre` VARCHAR
-   - `categoria` VARCHAR
-   - `precio` DOUBLE
-   - `stock` INT
-4. Opcional: si deseas trabajar con el módulo de clientes, crea también la tabla `clientes`.
+3. Ejecuta el siguiente script SQL, incluido en el archivo `crear_tabla.sql`, para crear las tablas `productos` y `clientes`:
+
+```sql
+DROP DATABASE IF EXISTS akihabara_db;
+CREATE DATABASE IF NOT EXISTS akihabara_db;
+USE akihabara_db;
+
+-- Creación de la tabla productos
+CREATE TABLE IF NOT EXISTS productos (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    nombre VARCHAR(255) NOT NULL,
+    categoria VARCHAR(100),
+    precio DECIMAL(10,2),
+    stock INT
+);
+
+-- Creación de la tabla clientes
+CREATE TABLE IF NOT EXISTS clientes (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    nombre VARCHAR(255) NOT NULL,
+    email VARCHAR(255) NOT NULL UNIQUE,
+    telefono VARCHAR(20),
+    fecha_registro DATE DEFAULT (CURRENT_DATE)
+);
+```
 
 ### Configuración de la API Key de OpenRouter 🔑
 
@@ -78,26 +96,42 @@ Akihabara Market es una aplicación desarrollada en Java que permite gestionar e
 
 ---
 
+
 ## Estructura del Proyecto 🧱
 
-- **`modelo/`**
-  - `ProductoOtaku.java`, `ClienteOtaku.java`: Representación de productos y clientes en el sistema.
-  - `ProductoDAO.java`, `ClientesDAO.java`: Métodos de acceso a la base de datos para operaciones CRUD sobre productos y clientes.
-  - `ConexionBD.java`: Clase encargada de la conexión con la base de datos MySQL.
-  - `GuardarApiKey.java`, `LeerApiKey.java`: Clases para manejar la serialización de la API Key de OpenRouter.
-  
-- **`controlador/`**
-  - `ControladorProductos.java`: Controlador para la gestión de productos (consola y gráfica).
-  - `ControladorClientes.java`: Controlador para la gestión de clientes.
+- **`controlador/`**  
+  Contiene los controladores que gestionan la lógica de negocio desde el menú principal y los submenús.  
+  - `ControladorClientes.java`: Lógica de la gestión de clientes.  
+  - `ControladorPrincipal.java`: Muestra el menú principal y redirige a los submenús.  
+  - `ControladorProductos.java`: Lógica de la gestión de productos.  
+  - `MainApp.java`: Clase principal que inicia la aplicación.
 
-- **`vista/`**
-  - `InterfazConsola.java`, `InterfazConsolaCliente.java`: Clases de interfaz de usuario en consola para gestionar productos y clientes.
-  - `ClientesPanel.java`, `ProductosPanel.java`: Interfaz gráfica con Swing para gestión de productos y clientes.
+- **`modelo/`**  
+  Incluye las clases del modelo de datos, conexión a la base de datos y servicios relacionados.  
+  - `ClienteDAO.java`, `ProductoDAO.java`: Clases DAO para operaciones CRUD sobre clientes y productos.  
+  - `ClienteOtaku.java`, `ProductoOtaku.java`: Clases que representan los objetos cliente y producto.  
+  - `ConexionDB.java`: Establece la conexión con la base de datos MySQL.  
+  - `GuardarApiKey.java`, `LeerApiKey.java`: Serialización y deserialización de la API Key para la IA.  
+  - `LlmService.java`: Comunicación con la API de OpenRouter para generar descripciones y categorías.  
+  - `SetupDatos.java`: Clase para inicializar datos si es necesario.
 
-- **`ia/`**
-  - `LlmService.java`: Servicio de integración con la API de OpenRouter para la generación de descripciones y sugerencias de categorías.
+- **`vista/`**  
+  Aquí van las interfaces gráficas (Java Swing) para la interacción visual con el usuario.  
+  - `ClientesPanel.java`: Panel Swing para gestionar clientes.  
+  - `ProductosPanel.java`: Panel Swing para gestionar productos.  
+  - `InterfazConsolaClientes.java`: Interfaz de usuario en consola para gestionar clientes.  
+  - `InterfazConsolaPrincipal.java`: Interfaz de usuario en consola para gestionar el menú principal.  
+  - `InterfazConsolaProductos.java`: Interfaz de usuario en consola para gestionar productos.  
+  - `PanelPrincipalGUI.java`: Interfaz gráfica principal con Java Swing.  
 
-- **`MainApp.java`**: Punto de entrada de la aplicación que lanza el flujo del programa.
+- **`jar/`**  
+  Librerías externas necesarias para la ejecución del proyecto.  
+  - `gson-2.10.1.jar`: Usada para trabajar con JSON.  
+  - `mysql-connector-j-9.3.0.jar`: Conector JDBC para MySQL.
+
+- **`apiKey.ser`**  
+  Archivo serializado que guarda la clave API de OpenRouter.
+
 
 ---
 
@@ -118,4 +152,4 @@ Akihabara Market es una aplicación desarrollada en Java que permite gestionar e
 
 ---
 
-¡ Gracias por usar el sistema de gestión de inventario de Akihabara Market :) !
+Gracias por leer. Sistema de Gestión de Inventario Akihabara Market. Iris Pérez Aparicio :).

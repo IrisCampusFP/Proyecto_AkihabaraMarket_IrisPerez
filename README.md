@@ -152,4 +152,8 @@ CREATE TABLE IF NOT EXISTS clientes (
 
 ---
 
-Gracias por leer. Sistema de Gestión de Inventario Akihabara Market. Iris Pérez Aparicio :).
+---
+
+**Gracias por leer.**  
+**Sistema de Gestión de Inventario Akihabara Market**  
+*Iris Pérez Aparicio* :)
